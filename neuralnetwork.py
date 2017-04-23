@@ -11,10 +11,10 @@ def main():
 
     # now we need to perform feature scaling on the features 
     features = scikit.preprocessing.normalize(features,'l1')
-    train_x = features[0:470]
+    train_x = features[0:470 , ]
     train_y = labels[0:470]
-    test_x = features[471: , ]
-    test_y = labels[471: ]
+    test_x = features[470: , ]
+    test_y = labels[470: ]
 
     print test_y
 
