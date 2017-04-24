@@ -11,9 +11,9 @@ def main():
     count = 0
     for i in labels:
         if (i=='M'):
-            temp[count] = 0
-        else:
             temp[count] = 1
+        else:
+            temp[count] = 0
         count = count + 1
     features = dataset.iloc[:, 2:].values
 
@@ -23,6 +23,8 @@ def main():
     train_y = temp[0:470]
     test_x = features[470: , ]
     test_y = temp[470: ]
+
+    # now we implement logistic regression
 
     print test_y
 
