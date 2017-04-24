@@ -2,6 +2,10 @@ import pandas as pd
 import numpy
 import sklearn as scikit
 import sklearn.preprocessing
+from sklearn import metrics
+
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import classification_report,confusion_matrix
 
 from sklearn.neural_network import MLPClassifier
 from sklearn.metrics import classification_report,confusion_matrix
@@ -14,9 +18,9 @@ def main():
     count = 0
     for i in labels:
         if (i=='M'):
-            temp[count] = 1
+            temp[count] = '1'
         else:
-            temp[count] = 0
+            temp[count] = '0'
         count = count + 1
     features = dataset.iloc[:, 2:].values
 
@@ -36,7 +40,13 @@ def main():
     print(confusion_matrix(test_y,predictions))
     print(classification_report(test_y,predictions))
 
+<<<<<<< HEAD
+    y = metrics.accuracy_score(test_y,predictions)
+    
+    print(y)
+=======
     # print test_y
+>>>>>>> f10b1bcf532bb725baa044b4ea330640cc792d9f
 
 
 main()
