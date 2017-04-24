@@ -40,13 +40,7 @@ def main():
     print(confusion_matrix(test_y,predictions))
     print(classification_report(test_y,predictions))
 
-<<<<<<< HEAD
     y = metrics.accuracy_score(test_y,predictions)
-    
     print(y)
-=======
-    # print test_y
->>>>>>> f10b1bcf532bb725baa044b4ea330640cc792d9f
-
 
 main()
