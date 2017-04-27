@@ -5,10 +5,7 @@ import sklearn.preprocessing
 from sklearn import metrics
 
 from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import classification_report,confusion_matrix
-
-from sklearn.neural_network import MLPClassifier
-from sklearn.metrics import classification_report,confusion_matrix
+from sklearn.metrics import classification_report, confusion_matrix
 
 def main():
     location = "breastcancerdataset.csv"
@@ -31,11 +28,12 @@ def main():
     test_x = features[470: , ]
     test_y = temp[470: ]
 
-    clf = MLPClassifier(alpha=1e-5, hidden_layer_sizes=(30,30,30))
+    # Making the neural network model
+    # sklearn.neural_network.
+    model_A = MLPClassifier(alpha=1e-5, hidden_layer_sizes=(376,282,188,94))
+    model_A.fit(train_x,train_y)
 
-    clf.fit(train_x,train_y)
-
-    predictions = clf.predict(test_x)
+    predictions = model_A.predict(test_x)
 
     print(confusion_matrix(test_y,predictions))
     print(classification_report(test_y,predictions))
