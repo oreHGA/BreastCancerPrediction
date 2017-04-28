@@ -35,10 +35,10 @@ def main():
 
     predictions = model_A.predict(test_x)
 
-    print(confusion_matrix(test_y,predictions))
-    print(classification_report(test_y,predictions))
+    print(confusion_matrix(test_y, predictions))
+    print(classification_report(test_y, predictions))
 
-    y = metrics.accuracy_score(test_y,predictions)
-    print(y)
+    accuracy = metrics.accuracy_score(test_y, predictions)
+    print accuracy
 
 main()
