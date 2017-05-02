@@ -5,6 +5,7 @@ import sklearn.preprocessing
 import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
+from sklearn.cluster import KMeans
 
 def plotfeatures(xsample, ysample):
     count = 0
@@ -28,20 +29,19 @@ def getdataset(location="./data/breastcancerdataset.csv"):
     temp = []
     for i in labels:
         if i == 'M':
-            temp.append('1')
-        else:
             temp.append('0')
+        else:
+            temp.append('1')
         count = count + 1
     features = dataset.iloc[:, 2:].values
     features = sklearn.preprocessing.normalize(features, 'l1')
     train_x = features[0:235, ]
-    train_y = temp[0:235]
+    train_y = [map(int, x) for x in temp[0:235]]
     valid_x = features[235:470, ]
-    valid_y = temp[235:470]
+    valid_y = [map(int, x) for x in temp[235:470]]
     test_x = features[470:, ]   # we do not touch these variables until the we get the best model
-    test_y = temp[470:]       # we do not touch these variables until the we get the best model
+    test_y = [map(int, x) for x in temp[470:]]   # we do not touch these variables until the we get the best model
     plotfeatures(xsample=features, ysample=labels)
-    print temp
     return train_x, train_y, valid_x, valid_y, test_x, test_y
 
 def logistic():
@@ -56,11 +56,31 @@ def logistic():
     model_b = model_b.fit(train_x, train_y)
     prediction = model_b.predict(valid_x)
     accuracy_b = metrics.accuracy_score(valid_y, prediction)
-    if accuracy_a > accuracy_b:
+    if accuracy_a >= accuracy_b:
         better_model = model_a
     else:
         better_model = model_b
     return better_model
 
-logistic()
+def neuralnetwork():
+    pass
 
+def kmeansimplementation():
+    train_x, train_y, valid_x, valid_y, test_x, test_y = getdataset()
+    model_a = KMeans(n_clusters=2, init='k-means++', tol=1e-10, random_state=0).fit(train_x)
+    prediction = model_a.predict(valid_x)
+    accuracy_a = metrics.accuracy_score(valid_y, prediction)
+    print accuracy_a
+    # next possible model
+    model_b = KMeans(n_clusters=2, init='random', tol=1e-10, random_state=0).fit(train_x)
+    prediction = model_b.predict(valid_x)
+    accuracy_b = metrics.accuracy_score(valid_y, prediction)
+    print accuracy_b
+    if accuracy_a >= accuracy_b:
+        better_model = model_a
+    else:
+        better_model = model_b
+    return better_model
+
+logistic_model = logistic()
+kmeans_model = kmeansimplementation()
