@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn import metrics
 from sklearn.cluster import KMeans
+from sklearn.model_selection import learning_curve
+from mpl_toolkits.mplot3d import Axes3D
 
 def plotfeatures(xsample, ysample):
     count = 0
@@ -64,23 +66,43 @@ def logistic():
 
 def neuralnetwork():
     pass
+def supportvectors():
+    pass
 
 def kmeansimplementation():
     train_x, train_y, valid_x, valid_y, test_x, test_y = getdataset()
-    model_a = KMeans(n_clusters=2, init='k-means++', tol=1e-10, random_state=0).fit(train_x)
+    model_a = KMeans(n_clusters=2, init='k-means++', tol=1e-6, random_state=0).fit(train_x)
     prediction = model_a.predict(valid_x)
     accuracy_a = metrics.accuracy_score(valid_y, prediction)
-    print accuracy_a
     # next possible model
-    model_b = KMeans(n_clusters=2, init='random', tol=1e-10, random_state=0).fit(train_x)
+    # learning_curve.
+    model_b = KMeans(n_clusters=2, init='random', tol=1e-6, random_state=0).fit(train_x)
     prediction = model_b.predict(valid_x)
     accuracy_b = metrics.accuracy_score(valid_y, prediction)
-    print accuracy_b
     if accuracy_a >= accuracy_b:
         better_model = model_a
     else:
         better_model = model_b
+    
+    
+    fig = plt.figure(1, figsize=(4,3))
+    plt.clf()
+    ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
+
+    plt.cla()
+    labels = better_model.labels_
+    ax.scatter(train_x[:, 1], train_x[:, 2], train_x[:, 3], c=labels.astype(numpy.float))
+
+    ax.w_xaxis.set_ticklabels([])
+    ax.w_yaxis.set_ticklabels([])
+    ax.w_zaxis.set_ticklabels([])
+    ax.set_xlabel('Radius Mean')
+    ax.set_ylabel('Texture Mean')
+    ax.set_zlabel('Perimeter Mean')
+    plt.show()
+
     return better_model
 
+#  we would then see how they do with the testing data
 logistic_model = logistic()
 kmeans_model = kmeansimplementation()
