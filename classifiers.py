@@ -52,13 +52,11 @@ def preprocess_data(X,Y):
     test_y = [map(int, x) for x in Y[470:]]   # we do not touch these variables until the we get the best model
     return train_x, train_y, valid_x, valid_y, test_x, test_y,feat
 
-
 def logistic(train_x, train_y, valid_x, valid_y):
     # First Possible Model
     model_a = LogisticRegression(C=1e6, solver='liblinear')
     train_scores, valid_scores = validation_curve(model_a, train_x, train_y, "alpha",numpy.logspace(-7, 3, 3))
     train_sizes, train_scores, test_scores  = learning_curve(model_a, train_x,train_y, cv=None, n_jobs=1, train_sizes=numpy.linspace(.1, 1.0, 5))
-   
     # model_a = model_a.fit(train_x, train_y)
     prediction = model_a.predict(valid_x)
     accuracy_a = metrics.accuracy_score(valid_y, prediction)
@@ -99,8 +97,7 @@ def supportvectors(features,train_x,train_y,valid_x,valid_y):
     accuracy_a = metrics.accuracy_score(valid_y,prediction_a)
     print accuracy_a
 
-    return model_a
-    
+    return model_a  
 
 def kmeansimplementation(train_x, train_y, valid_x, valid_y):
     model_a = KMeans(n_clusters=2, init='k-means++', tol=1e-6, random_state=0).fit(train_x)
@@ -133,13 +130,6 @@ def kmeansimplementation(train_x, train_y, valid_x, valid_y):
 
     return better_model
 
-
-
-
-
-
-
-
 #  we would then see how they do with the testing data
 features,labels,temp = getdataset()
 #  preprocess the dataset
@@ -150,14 +140,22 @@ plotfeatures(xsample=features, ysample=labels)
 
 # getting the best models for testing on the testing dataset
 # logistic_model = logistic(train_x,train_y,valid_x,valid_y)
-# kmeans_model = kmeansimplementation(train_x,train_y,valid_x,valid_y)
-nn_model = neuralnetwork(train_x,train_y,valid_x,valid_y)
 # svm_model = supportvectors(features,train_x,train_y,valid_x,valid_y)
 
 # apply the new model on the testing data
+nn_model = neuralnetwork(train_x, train_y, valid_x, valid_y)
 nn_prediction = nn_model.predict(test_x)
 nn_accuracy  =  metrics.accuracy_score(test_y, nn_prediction)
 nn_cnf = metrics.confusion_matrix(test_y,nn_prediction)
-print nn_cnf
 nn_class_report = metrics.classification_report(numpy.asarray(test_y),numpy.asarray(nn_prediction))
-print "Classification Report for Neural Network\n," , nn_class_report
+print "Classification Report for Neural Network\n,", nn_class_report
+print nn_cnf
+
+# apply Kmeans_model on testing data
+kmeans_model = kmeansimplementation(train_x, train_y, valid_x, valid_y)
+kmeans_prediction = kmeans_model.predict(test_x)
+kmeans_accuracy = metrics.accuracy_score(test_y, kmeans_prediction)
+kmeans_cnf = metrics.confusion_matrix(test_y, kmeans_prediction)
+kmeans_class_report = metrics.classification_report(numpy.asarray(test_y),numpy.asarray(kmeans_prediction))
+print "Classification Report for KMeans Model\n", kmeans_class_report
+print kmeans_cnf
