@@ -10,6 +10,7 @@ from sklearn.model_selection import learning_curve
 from sklearn.model_selection import validation_curve
 from mpl_toolkits.mplot3d import Axes3D
 
+from sklearn import svm
 from sklearn.neural_network import MLPClassifier
 
 def plotfeatures(xsample, ysample):
@@ -89,8 +90,17 @@ def neuralnetwork(train_x, train_y, valid_x, valid_y):
         better_model = model_b
     return better_model
 
-def supportvectors():
-    pass
+def supportvectors(features,train_x,train_y,valid_x,valid_y):
+    feature1 = features[:,0]    #radius_mean column
+    feature2 = features[:,1]    #textrue_mean columm
+    model_a = svm.SVC(C=1.0,kernel='rbf',tol=1e-4)
+    model_a.fit(train_x,train_y)
+    prediction_a = model_a.predict(valid_x)
+    accuracy_a = metrics.accuracy_score(valid_y,prediction_a)
+    print accuracy_a
+
+    return model_a
+    
 
 def kmeansimplementation(train_x, train_y, valid_x, valid_y):
     model_a = KMeans(n_clusters=2, init='k-means++', tol=1e-6, random_state=0).fit(train_x)
@@ -123,15 +133,31 @@ def kmeansimplementation(train_x, train_y, valid_x, valid_y):
 
     return better_model
 
+
+
+
+
+
+
+
 #  we would then see how they do with the testing data
 features,labels,temp = getdataset()
-
+#  preprocess the dataset
 train_x, train_y, valid_x, valid_y, test_x, test_y, features = preprocess_data(features, temp)
 
 # to visualize the dataset to the users
-# plotfeatures(xsample=features, ysample=labels)
+plotfeatures(xsample=features, ysample=labels)
 
 # getting the best models for testing on the testing dataset
 # logistic_model = logistic(train_x,train_y,valid_x,valid_y)
-kmeans_model = kmeansimplementation(train_x,train_y,valid_x,valid_y)
+# kmeans_model = kmeansimplementation(train_x,train_y,valid_x,valid_y)
 nn_model = neuralnetwork(train_x,train_y,valid_x,valid_y)
+# svm_model = supportvectors(features,train_x,train_y,valid_x,valid_y)
+
+# apply the new model on the testing data
+nn_prediction = nn_model.predict(test_x)
+nn_accuracy  =  metrics.accuracy_score(test_y, nn_prediction)
+nn_cnf = metrics.confusion_matrix(test_y,nn_prediction)
+print nn_cnf
+nn_class_report = metrics.classification_report(numpy.asarray(test_y),numpy.asarray(nn_prediction))
+print "Classification Report for Neural Network\n," , nn_class_report
