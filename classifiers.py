@@ -95,7 +95,7 @@ def logistic(train_x, train_y, valid_x, valid_y):
         better_model = model_a
     else:
         better_model = model_b
-    return model_a
+    return better_model
 
 def neuralnetwork(train_x, train_y, valid_x, valid_y):
     #First Possibile Model
