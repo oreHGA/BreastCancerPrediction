@@ -115,15 +115,25 @@ def neuralnetwork(train_x, train_y, valid_x, valid_y):
     return better_model
 
 def supportvectors(features,train_x,train_y,valid_x,valid_y):
-    feature1 = features[:,0]    #radius_mean column
-    feature2 = features[:,1]    #textrue_mean columm
+    
+    #first possible model
     model_a = svm.SVC(C=1.0,kernel='rbf',tol=1e-4)
     model_a.fit(train_x,train_y)
     prediction_a = model_a.predict(valid_x)
     accuracy_a = metrics.accuracy_score(valid_y,prediction_a)
-    print accuracy_a
+    
+    #next possible model
+    model_b = svm.SVC(gamma=1, C=200)
+    model_b.fit(train_x,train_y)
+    prediction_b=model_b.predict(valid_x)
+    accuracy_b = metrics.accuracy_score(valid_y,prediction_b)
+    
+    if accuracy_a >= accuracy_b:
+        better_model = model_a
+    else:
+        better_model = model_b
 
-    return model_a  
+    return better_model  
 
 def kmeansimplementation(train_x, train_y, valid_x, valid_y):
     model_a = KMeans(n_clusters=2, init='k-means++', tol=1e-6, random_state=0).fit(train_x)
