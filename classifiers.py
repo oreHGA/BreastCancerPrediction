@@ -16,6 +16,7 @@ from plot_learning_curve import plot_learning_curve
 from mpl_toolkits.mplot3d import Axes3D
 
 from plot_confusion_matrix import plot_confusion_matrix
+import svm_code
 import matplotlib.pyplot as plt
 
 def plotfeatures(xsample, ysample):
@@ -31,7 +32,7 @@ def plotfeatures(xsample, ysample):
     plt.ylabel('radius_mean')
     plt.legend(handles=[malignant, benign], labels=['Malignant', 'Benign'])
     plt.title('A scatter plot of the Dataset considering 2 features, radius_mean and texture_mean')
-    plt.savefig("Visualized_features.png")
+    plt.savefig("./images/Visualized_features.png")
 
 def getdataset(location="./data/breastcancerdataset.csv"):
     dataset = pd.read_csv(location, ',')
@@ -139,7 +140,7 @@ def kmeansimplementation(train_x, train_y, valid_x, valid_y):
     ax.set_xlabel('Radius Mean')
     ax.set_ylabel('Texture Mean')
     ax.set_zlabel('Perimeter Mean')
-    plt.savefig("kmeans_cluster.png")
+    plt.savefig("./images/kmeans_cluster.png")
     return better_model
     
 def comparemodels(models,accuracies):
@@ -155,10 +156,11 @@ def comparemodels(models,accuracies):
     plt.xticks(y_pos,models)
     plt.ylabel('Model Accuracies')
     plt.title('Models used and their respective accuracies')
-    plt.savefig("Model_comparison.png")
+    plt.savefig("./images/Model_comparison.png")
     
 #  we would then see how they do with the testing data
 features,labels,temp = getdataset()
+
 #  preprocess the dataset
 train_x, train_y, valid_x, valid_y, test_x, test_y, features = preprocess_data(features, temp)
 
@@ -181,11 +183,11 @@ numpy.set_printoptions(precision=2)
 # Plot non-normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(nn_cnf, classes=class_names, title='Confusion matrix, without normalization')
-plt.savefig("nn_confusion_matrix.png")
+plt.savefig("./images/nn_confusion_matrix.png")
 # Plot normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(nn_cnf, classes=class_names, normalize=True, title='Normalized confusion matrix')
-plt.savefig("nn_confusion_matrix_normalized.png")
+plt.savefig("./images/nn_confusion_matrix_normalized.png")
 
 # apply Kmeans_model on testing data
 kmeans_model = kmeansimplementation(train_x, train_y, valid_x, valid_y)
@@ -199,11 +201,11 @@ print "Accuracy : ", kmeans_accuracy
 # Plot non-normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(kmeans_cnf, classes=class_names, title='Confusion matrix, without normalization')
-plt.savefig("kmeans_confusion_matrix.png")
+plt.savefig("./images/kmeans_confusion_matrix.png")
 # Plot normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(kmeans_cnf, classes=class_names, normalize=True, title='Normalized confusion matrix')
-plt.savefig("kmeans_confusion_matrix_normalized.png")
+plt.savefig("./images/kmeans_confusion_matrix_normalized.png")
 
 # apply the Logistic Model on the testing data
 logistic_model = logistic(train_x, train_y, valid_x, valid_y)
@@ -217,12 +219,14 @@ print "Accuracy : ", logistic_accuracy
 # Plot non-normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(logistic_cnf, classes=class_names, title='Confusion matrix, without normalization')
-plt.savefig("logistic_confusion_matrix.png")
+plt.savefig("./images/logistic_confusion_matrix.png")
 # Plot normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(logistic_cnf, classes=class_names, normalize=True, title='Normalized confusion matrix')
-plt.savefig("logisitic_confusion_matrix_normalized.png")
+plt.savefig("./images/logisitic_confusion_matrix_normalized.png")
 
+# apply the SVM Model on the testing data
+svm_code.call_support_vector()  # this calles the code that plots the SVM linear and rbf
 svm_model = supportvectors(features,train_x,train_y,valid_x,valid_y)
 svm_prediction = svm_model.predict(test_x)
 svm_accuracy = metrics.accuracy_score(test_y, svm_prediction)
@@ -234,13 +238,13 @@ print "Accuracy : ", svm_accuracy
 # Plot non-normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(svm_cnf, classes=class_names, title='Confusion matrix, without normalization')
-plt.savefig("svm_confusion_matrix.png")
+plt.savefig("./images/svm_confusion_matrix.png")
 # Plot normalized confusion matrix
 plt.figure()
 plot_confusion_matrix(svm_cnf, classes=class_names, normalize=True, title='Normalized confusion matrix')
-plt.savefig("svm_confusion_matrix_normalized.png")
+plt.savefig("./images/svm_confusion_matrix_normalized.png")
 
+#  This is to plot the models and their accuracies
 models = ["Logistic","Neural Networks","SVM","KMeans"]
 accuracies = [logistic_accuracy,nn_accuracy,svm_accuracy,kmeans_accuracy]
-
 comparemodels(models,accuracies)

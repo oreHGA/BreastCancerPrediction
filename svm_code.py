@@ -31,7 +31,7 @@ def plot_linear(X,temp):
     plot_classifications(X,temp)
 
     plt.title('SVM classifier using a linear kernel')
-    plt.savefig("svm_linear.png")
+    plt.savefig("./images/svm_linear.png")
 
     accuracy = metrics.accuracy_score(temp, prediction)
     print "accuracy using linear kernel: ", accuracy
@@ -61,7 +61,7 @@ def plot_rbf(X,temp):
     plot_classifications(X,temp)
 
     plt.title('SVM classifier using a Radial Basis Function(RBF) kernel')
-    plt.savefig("svm_rbf.png")
+    plt.savefig("./images/svm_rbf.png")
 
     accuracy = metrics.accuracy_score(temp, prediction)
     print "accuracy using RBF kernel: ", accuracy
@@ -79,7 +79,7 @@ def plot_classifications(X,temp):
     plt.ylabel('radius_mean')
 
 
-def main():
+def call_support_vector():
     location = "./data/breastcancerdataset.csv"
     dataset = pd.read_csv(location, ',')
     labels = dataset.iloc[:, 1].values
@@ -106,7 +106,5 @@ def main():
     X = np.vstack((feature1, feature2)).T   #create single array with 2 columns each; used for fitting the model using clf.fit()
 
     plot_linear(X,temp)
-    plot_rbf(X,temp)    #this takes about 15 seconds to finish executing, be patient!!
-
-
-main()
+    print "Please wait RBF Kernel takes about 15 seconds to plot"
+    plot_rbf(X,temp) 
