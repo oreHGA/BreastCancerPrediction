@@ -17,6 +17,8 @@ from mpl_toolkits.mplot3d import Axes3D
 
 from plot_confusion_matrix import plot_confusion_matrix
 import svm_code
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 
 def plotfeatures(xsample, ysample):

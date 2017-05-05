@@ -5,8 +5,9 @@ import sklearn.preprocessing
 from sklearn import svm
 from sklearn import metrics
 import sklearn.utils.multiclass as checking
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
-
 def plot_linear(X,temp):
     #create plot for SVM classifier using a linear kernel
     clf = svm.SVC(kernel='linear')
