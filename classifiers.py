@@ -60,29 +60,6 @@ def preprocess_data(X,Y):
 def logistic(train_x, train_y, valid_x, valid_y):
     # First Possible Model
     model_a = LogisticRegression(C=1e6, solver='liblinear')
-
-    # skf = StratifiedKFold(n_splits=2)
-
-    # # train_scores, valid_scores = validation_curve(model_a, train_x, train_y, "alpha",numpy.logspace(-7, 3, 3))
-    # features  = train_x.tolist() + valid_x.tolist()
-    # print len(features)
-    # print len(features[0])
-    # # features = features.tolist()
-    # features = numpy.asarray(features)
-    # print type(features)
-    # labels = train_y + valid_y
-    # labels = numpy.asarray(labels)
-    # labels = labels.reshape((len(labels,)))
-    # print labels.shape
-    # print type(labels)
-    # from sklearn.naive_bayes import GaussianNB
-    # from sklearn.linear_model import Ridge
-    # est = LogisticRegression()
-    # print est.get_params().keys()
-    # train_scores, test_scores= validation_curve(Ridge(),features,labels,"max_iter", numpy.logspace(-7, 3, 3))
-    # plt.plot(train_scores,test_scores)
-    # plt.show()
-    # train_sizes, train_scores, test_scores  = plot_learning_curve(model_a, "Learning Curves", features, labels, ylim=None, cv=skf, n_jobs=1, train_sizes=numpy.asarray([1,50,100,150,200]))
     model_a = model_a.fit(train_x, train_y)
     prediction = model_a.predict(valid_x)
     accuracy_a = metrics.accuracy_score(valid_y, prediction)
@@ -164,7 +141,22 @@ def kmeansimplementation(train_x, train_y, valid_x, valid_y):
     ax.set_zlabel('Perimeter Mean')
     plt.savefig("kmeans_cluster.png")
     return better_model
-
+    
+def comparemodels(models,accuracies):
+    #  Models would be a list of the models names for us to compare
+    #  Accuracies would be the accuracy of the m respective models
+    y_pos = numpy.arange((len(models)))
+    plt.clf()
+    bargraph = plt.bar(y_pos,accuracies,align='center',alpha=0.5)
+    bargraph[0].set_color('r')
+    bargraph[1].set_color('g')
+    bargraph[2].set_color('b')
+    bargraph[3].set_color('c')
+    plt.xticks(y_pos,models)
+    plt.ylabel('Model Accuracies')
+    plt.title('Models used and their respective accuracies')
+    plt.savefig("Model_comparison.png")
+    
 #  we would then see how they do with the testing data
 features,labels,temp = getdataset()
 #  preprocess the dataset
@@ -231,4 +223,24 @@ plt.figure()
 plot_confusion_matrix(logistic_cnf, classes=class_names, normalize=True, title='Normalized confusion matrix')
 plt.savefig("logisitic_confusion_matrix_normalized.png")
 
-# svm_model = supportvectors(features,train_x,train_y,valid_x,valid_y)
+svm_model = supportvectors(features,train_x,train_y,valid_x,valid_y)
+svm_prediction = svm_model.predict(test_x)
+svm_accuracy = metrics.accuracy_score(test_y, svm_prediction)
+svm_cnf = metrics.confusion_matrix(test_y, svm_prediction)
+svm_class_report = metrics.classification_report(numpy.asarray(test_y), numpy.asarray(svm_prediction))
+print "Classification Report for SVM Model\n", svm_class_report
+print svm_cnf
+print "Accuracy : ", svm_accuracy
+# Plot non-normalized confusion matrix
+plt.figure()
+plot_confusion_matrix(svm_cnf, classes=class_names, title='Confusion matrix, without normalization')
+plt.savefig("svm_confusion_matrix.png")
+# Plot normalized confusion matrix
+plt.figure()
+plot_confusion_matrix(svm_cnf, classes=class_names, normalize=True, title='Normalized confusion matrix')
+plt.savefig("svm_confusion_matrix_normalized.png")
+
+models = ["Logistic","Neural Networks","SVM","KMeans"]
+accuracies = [logistic_accuracy,nn_accuracy,svm_accuracy,kmeans_accuracy]
+
+comparemodels(models,accuracies)

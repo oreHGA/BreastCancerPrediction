@@ -31,7 +31,6 @@ def plot_linear(X,temp):
     plot_classifications(X,temp)
 
     plt.title('SVM classifier using a linear kernel')
-    plt.show()
     plt.savefig("svm_linear.png")
 
     accuracy = metrics.accuracy_score(temp, prediction)
@@ -39,6 +38,7 @@ def plot_linear(X,temp):
 
 def plot_rbf(X,temp):
     # Create plot of SVM classifier using a Radial Basis Function(RBF) kernel
+    plt.clf()
     clf = svm.SVC(kernel='rbf', gamma=0.7, C=1.0)
     clf.fit(X, temp)
     prediction = clf.predict(X)
@@ -61,7 +61,6 @@ def plot_rbf(X,temp):
     plot_classifications(X,temp)
 
     plt.title('SVM classifier using a Radial Basis Function(RBF) kernel')
-    plt.show()
     plt.savefig("svm_rbf.png")
 
     accuracy = metrics.accuracy_score(temp, prediction)
