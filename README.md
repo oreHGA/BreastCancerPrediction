@@ -22,7 +22,7 @@ $ pip install -U scikit-learn
 To run the code,
 
 ```sh
-$ python classifies.py
+$ python classifiers.py
 ```
 Once this successfsully runs, resulting images will be stored in the `image/` directory that contains evaluation results for the different models used here
 
